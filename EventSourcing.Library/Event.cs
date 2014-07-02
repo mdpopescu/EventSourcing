@@ -3,15 +3,22 @@ using ProtoBuf;
 
 namespace EventSourcing.Library
 {
-  [ProtoContract(SkipConstructor = true)]
+  [ProtoContract]
   public class Event
   {
+    public static readonly Event NULL = new Event { Id = Guid.Empty };
+
     [ProtoMember(1)]
     public Guid Id { get; private set; }
 
-    public Event(Guid id)
+    public Event()
     {
-      Id = id;
+      Id = Guid.NewGuid();
+    }
+
+    public virtual void Handle(ServiceLocator locator)
+    {
+      // do nothing
     }
   }
 }

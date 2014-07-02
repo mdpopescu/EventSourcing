@@ -13,5 +13,10 @@ namespace EventSourcing.Library
     {
       Id = Guid.NewGuid();
     }
+
+    public virtual Event Process(ServiceLocator locator)
+    {
+      return Event.NULL;
+    }
   }
 }

@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Diagnostics;
-using System.IO;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using EventSourcing.Library;
-using ProtoBuf;
 
 namespace EventSourcing.Server
 {
@@ -10,25 +9,26 @@ namespace EventSourcing.Server
   {
     private static void Main(string[] args)
     {
-      using (var ms = new MemoryStream())
-      {
-        var guid = Guid.NewGuid();
-        var val = new Event(guid);
-        Serializer.Serialize(ms, val);
-        ms.Position = 0;
-        var clone = Serializer.Deserialize<Event>(ms);
-        Debug.Assert(guid == clone.Id);
-      }
-      
-      using (var ms = new MemoryStream())
-      {
-        var val = new Command();
-        var guid = val.Id;
-        Serializer.Serialize(ms, val);
-        ms.Position = 0;
-        var clone = Serializer.Deserialize<Event>(ms);
-        Debug.Assert(guid == clone.Id);
-      }
+      var commands = new Subject<Command>();
+      var events = LoadEvents().Concat(commands.Select(ProcessCommand));
+      events.Subscribe(ev => ev.Handle(locator));
     }
+
+    public static IObservable<Event> LoadEvents()
+    {
+      // deserialize the list of events
+      return new Subject<Event>();
+    }
+
+    public static Event ProcessCommand(Command command)
+    {
+      var ev = command.Process(locator);
+      // serialize the event
+      return ev;
+    }
+
+    //
+
+    private static readonly ServiceLocator locator = new DictionaryBasedLocator();
   }
 }
