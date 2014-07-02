@@ -19,6 +19,16 @@ namespace EventSourcing.Server
         var clone = Serializer.Deserialize<Event>(ms);
         Debug.Assert(guid == clone.Id);
       }
+      
+      using (var ms = new MemoryStream())
+      {
+        var val = new Command();
+        var guid = val.Id;
+        Serializer.Serialize(ms, val);
+        ms.Position = 0;
+        var clone = Serializer.Deserialize<Event>(ms);
+        Debug.Assert(guid == clone.Id);
+      }
     }
   }
 }
