@@ -3,30 +3,34 @@ using System.Linq;
 using EventSourcing.Library;
 using EventSourcing.Server.Data;
 using EventSourcing.Server.Events;
-using ProtoBuf;
 
 namespace EventSourcing.Server.Commands
 {
-  [ProtoContract]
-  public class CreateProductCommand : Command
+  public class AddInventoryCommand : Command
   {
-    public CreateProductCommand(string name)
+    public AddInventoryCommand(string name, string qty)
     {
       this.name = name;
+      this.qty = qty;
     }
 
     public override Event Process(ServiceLocator locator)
     {
       var products = locator.Get<List<Product>>();
       var existing = products.FirstOrDefault(it => it.Name == name);
-      if (existing != null)
-        return null; // can be replaced by an error event
+      if (existing == null)
+        return new UnknownProductEvent(name);
 
-      return new ProductCreatedEvent(name);
+      decimal q;
+      if (!decimal.TryParse(qty, out q))
+        return new InvalidQuantityEvent(qty);
+
+      return new InventoryAddedEvent(name, q);
     }
 
     //
 
-    [ProtoMember(2)] private readonly string name;
+    private readonly string name;
+    private readonly string qty;
   }
 }

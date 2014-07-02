@@ -19,7 +19,7 @@ namespace EventSourcing.Server.Events
       var products = locator.Get<List<Product>>();
       products.Add(new Product(name));
 
-      Console.WriteLine("Product " + name + " created.");
+      Console.WriteLine("[{0}] Product {1} created.", CreatedOn.ToString("yyyy-MM-dd HH:mm:ss"), name);
     }
 
     //

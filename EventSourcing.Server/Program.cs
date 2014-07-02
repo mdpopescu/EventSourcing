@@ -67,12 +67,20 @@ namespace EventSourcing.Server
       if (cmd == "")
         Environment.Exit(0);
 
+      string name;
       switch (cmd)
       {
         case "1":
           Console.Write("Product name: ");
-          var name = Console.ReadLine();
+          name = Console.ReadLine();
           return new CreateProductCommand(name);
+
+        case "2":
+          Console.Write("Product name: ");
+          name = Console.ReadLine();
+          Console.Write("Quantity: ");
+          var qty = Console.ReadLine();
+          return new AddInventoryCommand(name, qty);
 
         default:
           return null;
