@@ -6,18 +6,12 @@ namespace EventSourcing.Library
   [ProtoContract(SkipConstructor = true)]
   public class Event
   {
-    public Guid Id
-    {
-      get { return id; }
-    }
+    [ProtoMember(1)]
+    public Guid Id { get; private set; }
 
     public Event(Guid id)
     {
-      this.id = id;
+      Id = id;
     }
-
-    //
-
-    [ProtoMember(1)] private readonly Guid id;
   }
 }
