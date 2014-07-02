@@ -13,7 +13,7 @@ namespace EventSourcing.Server
     private static void Main(string[] args)
     {
       var commands = new Subject<Command>();
-      var events = LoadEvents().Concat(commands.Select(ProcessCommand));
+      var events = LoadEvents().Concat(commands.Select(ProcessCommand).Where(ev => ev != null));
       events.Subscribe(ev => ev.Handle(locator));
 
       var products = new List<Product>();
@@ -22,7 +22,7 @@ namespace EventSourcing.Server
       while (true)
       {
         var command = GetCommand();
-        if (command != Command.NULL)
+        if (command != null)
           commands.OnNext(command);
       }
     }
@@ -75,7 +75,7 @@ namespace EventSourcing.Server
           return new CreateProductCommand(name);
 
         default:
-          return Command.NULL;
+          return null;
       }
     }
   }

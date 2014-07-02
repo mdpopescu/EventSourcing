@@ -20,7 +20,7 @@ namespace EventSourcing.Server.Commands
       var products = locator.Get<List<Product>>();
       var existing = products.FirstOrDefault(it => it.Name == name);
       if (existing != null)
-        return Event.NULL;
+        return null; // can be replaced by an error event
 
       products.Add(new Product(name));
       return new ProductCreatedEvent(name);
