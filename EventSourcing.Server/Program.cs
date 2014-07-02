@@ -88,8 +88,7 @@ namespace EventSourcing.Server
       Console.WriteLine("1. Create product (admin)");
       Console.WriteLine("2. Add inventory (admin)");
       Console.WriteLine("3. List inventory (admin)");
-      Console.WriteLine("4. Add product to cart");
-      Console.WriteLine("5. Checkout");
+      Console.WriteLine("4. Sell");
       Console.WriteLine();
       Console.Write("Enter command: ");
     }
@@ -99,7 +98,7 @@ namespace EventSourcing.Server
       if (cmd == "")
         throw new Exception();
 
-      string name;
+      string name, qty;
       switch (cmd)
       {
         case "1":
@@ -111,7 +110,7 @@ namespace EventSourcing.Server
           Console.Write("Product name: ");
           name = Console.ReadLine();
           Console.Write("Quantity: ");
-          var qty = Console.ReadLine();
+          qty = Console.ReadLine();
           return new AddInventoryCommand(name, qty);
 
         case "3":
@@ -119,6 +118,13 @@ namespace EventSourcing.Server
           // in this case, though, that's not necessary
           ListInventory();
           return new Command();
+
+        case "4":
+          Console.Write("Product name: ");
+          name = Console.ReadLine();
+          Console.Write("Quantity: ");
+          qty = Console.ReadLine();
+          return new SellCommand(name, qty);
 
         default:
           return null;

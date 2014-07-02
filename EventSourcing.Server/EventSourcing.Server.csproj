@@ -55,11 +55,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\AddInventoryCommand.cs" />
+    <Compile Include="Commands\SellCommand.cs" />
     <Compile Include="Commands\CreateProductCommand.cs" />
     <Compile Include="Data\Product.cs" />
+    <Compile Include="Events\InsufficientStockEvent.cs" />
     <Compile Include="Events\InvalidQuantityEvent.cs" />
     <Compile Include="Events\InventoryAddedEvent.cs" />
     <Compile Include="Events\ProductCreatedEvent.cs" />
+    <Compile Include="Events\SoldEvent.cs" />
     <Compile Include="Events\UnknownProductEvent.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
