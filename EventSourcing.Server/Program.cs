@@ -82,8 +82,23 @@ namespace EventSourcing.Server
           var qty = Console.ReadLine();
           return new AddInventoryCommand(name, qty);
 
+        case "3":
+          // we *could* use a command / event pair here, in case we want to know when this command was invoked
+          // in this case, though, that's not necessary
+          ListInventory();
+          return new Command();
+
         default:
           return null;
+      }
+    }
+
+    private static void ListInventory()
+    {
+      var products = locator.Get<List<Product>>();
+      foreach (var product in products)
+      {
+        Console.WriteLine("{0,-50} {1}", product.Name, product.Quantity);
       }
     }
   }
