@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using EventSourcing.Library;
 using EventSourcing.Server.Data;
-using ProtoBuf;
 
 namespace EventSourcing.Server.Events
 {
-  [ProtoContract]
+  [Serializable]
+  [DataContract]
   public class ProductCreatedEvent : Event
   {
     public ProductCreatedEvent(string name)
@@ -24,6 +25,6 @@ namespace EventSourcing.Server.Events
 
     //
 
-    [ProtoMember(3)] private readonly string name;
+    [DataMember(Order = 3)] private readonly string name;
   }
 }

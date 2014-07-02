@@ -1,48 +1,80 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using EventSourcing.Library;
 using EventSourcing.Server.Commands;
 using EventSourcing.Server.Data;
+using EventSourcing.Server.Serialization;
 
 namespace EventSourcing.Server
 {
   internal class Program
   {
-    private static void Main(string[] args)
+    private static void Main()
     {
-      var commands = new Subject<Command>();
-      var events = LoadEvents().Concat(commands.Select(ProcessCommand).Where(ev => ev != null));
-      events.Subscribe(ev => ev.Handle(locator));
+      serializer = new StreamSerializer();
 
-      var products = new List<Product>();
-      locator.Register(products);
-
-      while (true)
+      IObservable<Event> previousEvents;
+      using (var file = new FileStream("events.buf", FileMode.OpenOrCreate, FileAccess.Read, FileShare.None))
       {
-        var command = GetCommand();
-        if (command != null)
-          commands.OnNext(command);
+        previousEvents = LoadEvents(file);
+      }
+
+      using (var file = new FileStream("events.buf", FileMode.Append, FileAccess.Write, FileShare.None))
+      {
+        // the database
+        var products = new List<Product>();
+        locator.Register(products);
+
+        // the commands and events streams
+        var commands = new Subject<Command>();
+        var newEvents = commands
+          .Where(cmd => cmd != null)
+          .Select(command => ProcessCommand(command, file))
+          .Where(ev => ev != null);
+
+        var events = previousEvents.Concat(newEvents);
+        events.Subscribe(ev => ev.Handle(locator));
+
+        // the main loop
+        while (true)
+        {
+          try
+          {
+            var command = GetCommand();
+            if (command != null)
+              commands.OnNext(command);
+          }
+          catch
+          {
+            break;
+          }
+        }
       }
     }
 
-    public static IObservable<Event> LoadEvents()
+    public static IObservable<Event> LoadEvents(FileStream file)
     {
-      // deserialize the list of events
-      return Observable.Empty<Event>();
+      var list = serializer.LoadEvents(file).ToList();
+      return list.ToObservable();
     }
 
-    public static Event ProcessCommand(Command command)
+    public static Event ProcessCommand(Command command, FileStream file)
     {
       var ev = command.Process(locator);
-      // serialize the event
+
+      serializer.Serialize(file, ev);
+
       return ev;
     }
 
     //
 
     private static readonly ServiceLocator locator = new DictionaryBasedLocator();
+    private static StreamSerializer serializer;
 
     private static Command GetCommand()
     {
@@ -65,7 +97,7 @@ namespace EventSourcing.Server
     private static Command IdentifyCommand(string cmd)
     {
       if (cmd == "")
-        Environment.Exit(0);
+        throw new Exception();
 
       string name;
       switch (cmd)

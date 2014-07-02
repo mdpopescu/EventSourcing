@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Runtime.Serialization;
 using EventSourcing.Library;
-using ProtoBuf;
 
 namespace EventSourcing.Server.Events
 {
-  [ProtoContract]
+  [Serializable]
+  [DataContract]
   public class InvalidQuantityEvent : Event
   {
     public InvalidQuantityEvent(string qty)
@@ -19,6 +20,6 @@ namespace EventSourcing.Server.Events
 
     //
 
-    [ProtoMember(3)] private readonly string qty;
+    [DataMember(Order = 3)] private readonly string qty;
   }
 }

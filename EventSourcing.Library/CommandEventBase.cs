@@ -1,15 +1,16 @@
 ﻿using System;
-using ProtoBuf;
+using System.Runtime.Serialization;
 
 namespace EventSourcing.Library
 {
-  [ProtoContract]
+  [Serializable]
+  [DataContract]
   public class CommandEventBase
   {
-    [ProtoMember(1)]
+    [DataMember(Order = 1)]
     public Guid Id { get; private set; }
 
-    [ProtoMember(2)]
+    [DataMember(Order = 2)]
     public DateTime CreatedOn { get; private set; }
 
     public CommandEventBase()

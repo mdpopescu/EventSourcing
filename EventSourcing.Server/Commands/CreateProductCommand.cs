@@ -3,11 +3,9 @@ using System.Linq;
 using EventSourcing.Library;
 using EventSourcing.Server.Data;
 using EventSourcing.Server.Events;
-using ProtoBuf;
 
 namespace EventSourcing.Server.Commands
 {
-  [ProtoContract]
   public class CreateProductCommand : Command
   {
     public CreateProductCommand(string name)
@@ -27,6 +25,6 @@ namespace EventSourcing.Server.Commands
 
     //
 
-    [ProtoMember(2)] private readonly string name;
+    private readonly string name;
   }
 }

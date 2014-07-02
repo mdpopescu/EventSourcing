@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using EventSourcing.Library;
 using EventSourcing.Server.Data;
-using ProtoBuf;
 
 namespace EventSourcing.Server.Events
 {
-  [ProtoContract]
+  [Serializable]
+  [DataContract]
   public class InventoryAddedEvent : Event
   {
     public InventoryAddedEvent(string name, decimal qty)
@@ -27,7 +28,7 @@ namespace EventSourcing.Server.Events
 
     //
 
-    [ProtoMember(3)] private readonly string name;
-    [ProtoMember(4)] private readonly decimal qty;
+    [DataMember(Order = 3)] private readonly string name;
+    [DataMember(Order = 4)] private readonly decimal qty;
   }
 }

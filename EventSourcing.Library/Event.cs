@@ -1,8 +1,10 @@
-﻿using ProtoBuf;
+﻿using System;
+using System.Runtime.Serialization;
 
 namespace EventSourcing.Library
 {
-  [ProtoContract]
+  [Serializable]
+  [DataContract]
   public class Event : CommandEventBase
   {
     public virtual void Handle(ServiceLocator locator)
