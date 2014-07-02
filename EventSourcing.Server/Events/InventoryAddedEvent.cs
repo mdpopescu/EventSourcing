@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using EventSourcing.Library;
 using EventSourcing.Server.Data;
+using ProtoBuf;
 
 namespace EventSourcing.Server.Events
 {
+  [ProtoContract]
   public class InventoryAddedEvent : Event
   {
     public InventoryAddedEvent(string name, decimal qty)
@@ -25,7 +27,7 @@ namespace EventSourcing.Server.Events
 
     //
 
-    private readonly string name;
-    private readonly decimal qty;
+    [ProtoMember(3)] private readonly string name;
+    [ProtoMember(4)] private readonly decimal qty;
   }
 }

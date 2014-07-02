@@ -24,6 +24,6 @@ namespace EventSourcing.Server.Events
 
     //
 
-    [ProtoMember(2)] private readonly string name;
+    [ProtoMember(3)] private readonly string name;
   }
 }
