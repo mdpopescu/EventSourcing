@@ -6,7 +6,7 @@ using EventSourcing.Library.Serialization;
 
 namespace EventSourcing.Server.Serialization
 {
-  public class StreamSerializer : EventSerializer
+  public class BinarySerializer : EventSerializer
   {
     public IEnumerable<Event> LoadEvents(Stream file)
     {

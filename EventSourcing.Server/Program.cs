@@ -8,7 +8,6 @@ using EventSourcing.Library;
 using EventSourcing.Library.Serialization;
 using EventSourcing.Server.Commands;
 using EventSourcing.Server.Data;
-using EventSourcing.Server.Events;
 using EventSourcing.Server.Serialization;
 
 namespace EventSourcing.Server
@@ -17,23 +16,7 @@ namespace EventSourcing.Server
   {
     private static void Main()
     {
-      //serializer = new StreamSerializer();
-      serializer = new ProtobufSerializer(model =>
-      {
-        model.Add(typeof())
-      });
-
-      //new[]
-      //{
-      //  typeof (CommandEventBase),
-      //  typeof (Event),
-      //  typeof (ProductCreatedEvent),
-      //  typeof (InventoryAddedEvent),
-      //  typeof (InvalidQuantityEvent),
-      //  typeof (SoldEvent),
-      //  typeof (UnknownProductEvent),
-      //  typeof (InsufficientStockEvent),
-      //}
+      serializer = new BinarySerializer();
 
       IObservable<Event> previousEvents;
       using (var file = new FileStream("events.buf", FileMode.OpenOrCreate, FileAccess.Read, FileShare.None))

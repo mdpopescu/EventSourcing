@@ -4,13 +4,11 @@ using System.Linq;
 using System.Runtime.Serialization;
 using EventSourcing.Library;
 using EventSourcing.Server.Data;
-using ProtoBuf;
 
 namespace EventSourcing.Server.Events
 {
   [Serializable]
   [DataContract]
-  [ProtoContract(SkipConstructor = true)]
   public class InventoryAddedEvent : Event
   {
     public InventoryAddedEvent(string name, decimal qty)

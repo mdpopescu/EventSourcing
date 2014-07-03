@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Runtime.Serialization;
 using EventSourcing.Library;
-using ProtoBuf;
 
 namespace EventSourcing.Server.Events
 {
   [Serializable]
   [DataContract]
-  [ProtoContract(SkipConstructor = true)]
   public class InvalidQuantityEvent : Event
   {
     public InvalidQuantityEvent(string qty)
