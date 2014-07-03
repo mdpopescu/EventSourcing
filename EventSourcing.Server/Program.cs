@@ -5,8 +5,10 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using EventSourcing.Library;
+using EventSourcing.Library.Serialization;
 using EventSourcing.Server.Commands;
 using EventSourcing.Server.Data;
+using EventSourcing.Server.Events;
 using EventSourcing.Server.Serialization;
 
 namespace EventSourcing.Server
@@ -15,7 +17,23 @@ namespace EventSourcing.Server
   {
     private static void Main()
     {
-      serializer = new StreamSerializer();
+      //serializer = new StreamSerializer();
+      serializer = new ProtobufSerializer(model =>
+      {
+        model.Add(typeof())
+      });
+
+      //new[]
+      //{
+      //  typeof (CommandEventBase),
+      //  typeof (Event),
+      //  typeof (ProductCreatedEvent),
+      //  typeof (InventoryAddedEvent),
+      //  typeof (InvalidQuantityEvent),
+      //  typeof (SoldEvent),
+      //  typeof (UnknownProductEvent),
+      //  typeof (InsufficientStockEvent),
+      //}
 
       IObservable<Event> previousEvents;
       using (var file = new FileStream("events.buf", FileMode.OpenOrCreate, FileAccess.Read, FileShare.None))
@@ -33,10 +51,11 @@ namespace EventSourcing.Server
         var commands = new Subject<Command>();
         var newEvents = commands
           .Where(cmd => cmd != null)
-          .Select(command => ProcessCommand(command, file))
-          .Where(ev => ev != null);
+          .Select(command => ProcessCommand(command, file));
 
-        var events = previousEvents.Concat(newEvents);
+        var events = previousEvents
+          .Concat(newEvents)
+          .Where(ev => ev != null);
         events.Subscribe(ev => ev.Handle(locator));
 
         // the main loop
@@ -74,7 +93,7 @@ namespace EventSourcing.Server
     //
 
     private static readonly ServiceLocator locator = new DictionaryBasedLocator();
-    private static StreamSerializer serializer;
+    private static EventSerializer serializer;
 
     private static Command GetCommand()
     {

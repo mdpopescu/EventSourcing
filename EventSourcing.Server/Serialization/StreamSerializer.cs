@@ -2,10 +2,11 @@
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using EventSourcing.Library;
+using EventSourcing.Library.Serialization;
 
 namespace EventSourcing.Server.Serialization
 {
-  public class StreamSerializer
+  public class StreamSerializer : EventSerializer
   {
     public IEnumerable<Event> LoadEvents(Stream file)
     {

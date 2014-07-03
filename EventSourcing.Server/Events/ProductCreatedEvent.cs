@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using EventSourcing.Library;
 using EventSourcing.Server.Data;
+using ProtoBuf;
 
 namespace EventSourcing.Server.Events
 {
   [Serializable]
   [DataContract]
+  [ProtoContract(SkipConstructor = true)]
   public class ProductCreatedEvent : Event
   {
     public ProductCreatedEvent(string name)
