@@ -39,7 +39,7 @@ namespace EventSourcing.Server
         var events = previousEvents
           .Concat(newEvents)
           .Where(ev => ev != null);
-        events.Subscribe(ev => ev.Handle(locator));
+        events.Subscribe(ev => ev.Handle(locator), HandleError);
 
         // the main loop
         while (true)
@@ -140,6 +140,11 @@ namespace EventSourcing.Server
       {
         Console.WriteLine("{0,-50} {1}", product.Name, product.Quantity);
       }
+    }
+
+    private static void HandleError(Exception ex)
+    {
+      Console.WriteLine("Exception detected: " + ex.Message);
     }
   }
 }
