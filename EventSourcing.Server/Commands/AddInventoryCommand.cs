@@ -22,9 +22,8 @@ namespace EventSourcing.Server.Commands
         return new UnknownProductEvent(name);
 
       decimal q;
-      q = decimal.Parse(qty);
-      //if (!decimal.TryParse(qty, out q))
-      //  return new InvalidQuantityEvent(qty);
+      if (!decimal.TryParse(qty, out q))
+        return new InvalidQuantityEvent(qty);
 
       return new InventoryAddedEvent(name, q);
     }

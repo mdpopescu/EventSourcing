@@ -19,7 +19,7 @@ namespace EventSourcing.Server.Serialization
 
     public void Serialize(Stream file, Event ev)
     {
-      if (ev == null)
+      if (ev == null || ev == Event.NULL)
         return;
 
       var bf = new BinaryFormatter();

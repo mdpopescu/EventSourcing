@@ -7,9 +7,11 @@ namespace EventSourcing.Library
   [DataContract]
   public class Command : CommandEventBase
   {
+    public static readonly Command NULL = new Command();
+
     public virtual Event Process(ServiceLocator locator)
     {
-      return null;
+      return Event.NULL;
     }
   }
 }

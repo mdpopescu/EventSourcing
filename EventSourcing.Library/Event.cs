@@ -7,6 +7,8 @@ namespace EventSourcing.Library
   [DataContract]
   public class Event : CommandEventBase
   {
+    public static readonly Event NULL = new Event();
+
     public virtual void Handle(ServiceLocator locator)
     {
       // do nothing
