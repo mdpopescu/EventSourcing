@@ -25,7 +25,7 @@ namespace EventSourcing.Server
       var newEvents = client.Commands
         .Select(command => command.Process(locator))
         .Where(ev => ev != Event.NULL)
-        .Do(ev => eventStore.Events.OnNext(ev));
+        .Do(ev => eventStore.Save(ev));
 
       var events = eventStore
         .LoadEvents()

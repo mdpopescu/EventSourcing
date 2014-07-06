@@ -10,11 +10,6 @@ namespace EventSourcing.Server
 {
   public class FileEventStore : EventStore
   {
-    public IObserver<Event> Events
-    {
-      get { return events; }
-    }
-
     public FileEventStore(EventSerializer serializer, string path)
     {
       this.serializer = serializer;
@@ -22,7 +17,7 @@ namespace EventSourcing.Server
 
       var file = new FileStream(path, FileMode.Append, FileAccess.Write, FileShare.Read);
       events = new Subject<Event>();
-      events.Subscribe(ev => serializer.Serialize(file, ev), ex => file.Dispose(), () => file.Dispose());
+      events.Subscribe(ev => serializer.Serialize(file, ev), () => file.Dispose());
     }
 
     public IEnumerable<Event> LoadEvents()
@@ -33,6 +28,11 @@ namespace EventSourcing.Server
           .LoadEvents(file)
           .ToList();
       }
+    }
+
+    public void Save(Event ev)
+    {
+      events.OnNext(ev);
     }
 
     //
