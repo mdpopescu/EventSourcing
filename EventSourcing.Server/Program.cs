@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reactive.Linq;
 using EventSourcing.Library;
 using EventSourcing.Library.Serialization;
@@ -27,12 +28,14 @@ namespace EventSourcing.Server
         .Where(ev => ev != Event.NULL)
         .Do(ev => eventStore.Save(ev));
 
-      var events = eventStore
-        .LoadEvents()
+      var oldEvents = eventStore.LoadEvents().ToList();
+      var events = oldEvents
         .ToObservable()
         .Concat(newEvents);
       using (events.Subscribe(ev => ev.Handle(locator)))
       {
+        Console.WriteLine("Replayed " + oldEvents.Count + " events.");
+        
         client.AcceptCommands();
       }
     }
