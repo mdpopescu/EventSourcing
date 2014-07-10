@@ -17,7 +17,7 @@ namespace EventSourcing.Server.Commands
     public override Event Process(ServiceLocator locator)
     {
       var products = locator.Get<List<Product>>();
-      var existing = products.FirstOrDefault(it => it.Name == name);
+      var existing = products.FirstOrDefault(it => it.HasName(name));
       if (existing == null)
         return new UnknownProductEvent(name);
 

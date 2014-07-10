@@ -20,8 +20,8 @@ namespace EventSourcing.Server.Events
     public override void Handle(ServiceLocator locator)
     {
       var products = locator.Get<List<Product>>();
-      var existing = products.First(it => it.Name == name);
-      existing.Quantity += qty;
+      var existing = products.First(it => it.HasName(name));
+      existing.Buy(qty);
 
       Console.WriteLine("[{0}] Added qty {1} to product {2}.", CreatedOn.ToString("yyyy-MM-dd HH:mm:ss"), qty, name);
     }

@@ -17,7 +17,7 @@ namespace EventSourcing.Server.Commands
     public override Event Process(ServiceLocator locator)
     {
       var products = locator.Get<List<Product>>();
-      var existing = products.FirstOrDefault(it => it.Name == name);
+      var existing = products.FirstOrDefault(it => it.HasName(name));
       if (existing == null)
         return new UnknownProductEvent(name);
 
@@ -25,7 +25,7 @@ namespace EventSourcing.Server.Commands
       if (!decimal.TryParse(qty, out q))
         return new InvalidQuantityEvent(qty);
 
-      if (q > existing.Quantity)
+      if (!existing.CanSell(q))
         return new InsufficientStockEvent(name, q);
 
       return new SoldEvent(name, q);

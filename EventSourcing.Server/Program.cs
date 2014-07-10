@@ -5,7 +5,7 @@ using System.Reactive.Linq;
 using EventSourcing.Library;
 using EventSourcing.Library.Serialization;
 using EventSourcing.Server.Data;
-using EventSourcing.Server.Serialization;
+using EventSourcing.Server.Services.Serialization;
 
 namespace EventSourcing.Server
 {

@@ -4,7 +4,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using EventSourcing.Library;
 using EventSourcing.Library.Serialization;
 
-namespace EventSourcing.Server.Serialization
+namespace EventSourcing.Server.Services.Serialization
 {
   public class BinarySerializer : EventSerializer
   {

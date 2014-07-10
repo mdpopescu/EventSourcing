@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using EventSourcing.Library;
 using EventSourcing.Server.Data;
+using EventSourcing.Server.Services;
 
 namespace EventSourcing.Server.Queries
 {
@@ -12,7 +12,7 @@ namespace EventSourcing.Server.Queries
       var products = locator.Get<List<Product>>();
       foreach (var product in products)
       {
-        Console.WriteLine("{0,-50} {1}", product.Name, product.Quantity);
+        product.WriteTo(ConsoleWriter.Default);
       }
 
       // queries don't normally generate events
